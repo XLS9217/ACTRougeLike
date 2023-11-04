@@ -15,6 +15,10 @@ class ACTROUGELIKE_API ASCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> ProjectileClass;
+
 	// Sets default values for this character's properties
 	ASCharacter();
 
@@ -25,11 +29,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
-
+	 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	void MoveForward(float Value);//binding axis so provide value
+
+	void MoveRight(float Value);
+
+	void PrimaryAttack();
 
 public:	
 	// Called every frame
