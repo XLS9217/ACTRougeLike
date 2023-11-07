@@ -20,8 +20,9 @@ ASItemChest::ASItemChest()
 	TargetPitch = 110;
 }
 
-void ASItemChest::Interact_Impletementation(APawn* InstigatorPawn)
+void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Interact with chest")));
 	LidMesh->SetRelativeRotation(FRotator(TargetPitch, 0, 0));//relative to what it attatch to
 }
 

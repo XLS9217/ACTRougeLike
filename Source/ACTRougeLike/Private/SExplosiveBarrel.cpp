@@ -31,10 +31,11 @@ ASExplosiveBarrel::ASExplosiveBarrel()
 void ASExplosiveBarrel::OnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	ForceComp->FireImpulse();
-
-	FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
+	
+	UE_LOG(LogTemp, Log, TEXT("On Actor Hit barrel"));
+	UE_LOG(LogTemp, Warning, TEXT("Other Actor %s, at game time %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds)
+	FString CombinedString = FString::Printf(TEXT("Hit at location: %s"),*Hit.ImpactPoint.ToString());
 	DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Green, 2.0f, true);
-
 }
 
 void ASExplosiveBarrel::PostInitializeComponents()

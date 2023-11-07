@@ -8,6 +8,8 @@
 
 class UCameraComponent;
 class USpringArmComponent;
+class USInteractionComponent;
+class UAnimMontage;
 
 UCLASS()
 class ACTROUGELIKE_API ASCharacter : public ACharacter
@@ -16,28 +18,40 @@ class ACTROUGELIKE_API ASCharacter : public ACharacter
 
 public:
 
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> ProjectileClass;
-
 	// Sets default values for this character's properties
 	ASCharacter();
 
 protected:
+
+	FTimerHandle TimerHandle_PrimaryAttack;
+
+	UPROPERTY(EditAnywhere, Category="Attack")
+	UAnimMontage* AttackAnim;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> ProjectileClass;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
 
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* CameraComp;
+
+	UPROPERTY(VisibleAnywhere)
+	USInteractionComponent* InteractionComp;
 	 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void PrimaryAttack_TimeElapsed();
 
 	void MoveForward(float Value);//binding axis so provide value
 
 	void MoveRight(float Value);
 
 	void PrimaryAttack();
+
+	void PrimaryInteract();
 
 public:	
 	// Called every frame

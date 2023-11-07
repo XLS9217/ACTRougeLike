@@ -21,13 +21,13 @@ public:
 
 protected:
 	
-	UPROPERTY(VisibleAnywhere)//expose components
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)//expose components
 	USphereComponent* SphereComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UProjectileMovementComponent* MovementComp;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UParticleSystemComponent* EffectComp;
 
 	//call when game starts or when spawned

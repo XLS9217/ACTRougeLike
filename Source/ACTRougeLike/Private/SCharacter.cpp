@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "DrawDebugHelpers.h"
+#include "SInteractionComponent.h"
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -20,7 +21,9 @@ ASCharacter::ASCharacter()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
 	CameraComp->SetupAttachment(SpringArmComp);
 
-	//GetCharacterMovement()->bOrientRotationMovement = true;//set it in game
+	InteractionComp = CreateDefaultSubobject<USInteractionComponent>("InteractionComp");
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;//set it in game
 
 	bUseControllerRotationYaw = false;
 
@@ -31,6 +34,18 @@ void ASCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+}
+
+void ASCharacter::PrimaryAttack_TimeElapsed()
+{
+	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+	FTransform SpawnTransform = FTransform(GetControlRotation(), HandLocation);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	SpawnParams.Instigator = this;//tell information about who generates the stuff
+
+	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
 }
 
 void ASCharacter::MoveForward(float Value)
@@ -59,13 +74,19 @@ void ASCharacter::MoveRight(float Value)
 
 void ASCharacter::PrimaryAttack()
 {
-	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+	PlayAnimMontage(AttackAnim);
 
-	FTransform SpawnTransform = FTransform(GetControlRotation(), HandLocation);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::PrimaryAttack_TimeElapsed, 0.2f);
 
-	GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTransform, SpawnParams);
+}
+
+void ASCharacter::PrimaryInteract()
+{
+
+	if (InteractionComp)
+	{
+		InteractionComp->PrimaryInteract();
+	}
 }
 
 // Called every frame
@@ -101,9 +122,9 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
 
 	PlayerInputComponent->BindAction("PrimaryAttack",IE_Pressed, this, &ASCharacter::PrimaryAttack);
-
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASCharacter::Jump);
+	PlayerInputComponent->BindAction("PrimaryInteract",IE_Pressed, this, &ASCharacter::PrimaryInteract);
 }
 
