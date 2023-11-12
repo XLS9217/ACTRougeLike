@@ -48,7 +48,7 @@ void USInteractionComponent::PrimaryInteract()
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("hit actor")));
 			if (HitActor->Implements<USGameplayInterface>())
 			{
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("hit actor with USGameplayInterface")));
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("hit actor with USGameplayInterface")));
 				APawn* MyPawn = Cast<APawn>(MyOwner);
 				ISGameplayInterface::Execute_Interact(HitActor, MyPawn);//first needs to be there, second is our own parameter
 				break;
