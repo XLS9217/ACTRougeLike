@@ -11,6 +11,7 @@ class USpringArmComponent;
 class USInteractionComponent;
 class UAnimMontage;
 class USAttributeComponent;
+class UParticleSystem;
 
 UCLASS()
 class ACTROUGELIKE_API ASCharacter : public ACharacter
@@ -23,6 +24,12 @@ public:
 	ASCharacter();
 
 protected:
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName TimeToHitParamName;
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName HandSocketName;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
@@ -37,6 +44,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	TSubclassOf<AActor> DashProjectileClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	UParticleSystem* CastingEffect;
 
 	UPROPERTY(VisibleAnywhere)
 	USpringArmComponent* SpringArmComp;
@@ -66,6 +76,8 @@ protected:
 	void MoveRight(float Value);
 
 	void PrimaryAttack();
+
+	void StartAttackEffects();
 
 	void BlackHoleAttack();
 
