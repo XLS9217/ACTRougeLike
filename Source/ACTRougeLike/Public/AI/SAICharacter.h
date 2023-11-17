@@ -10,6 +10,8 @@
 
 class PawnSensingComponent;
 class USAttributeComponent;
+class UUserWidget;
+class USWorldUserWidget;
 
 UCLASS()
 class ACTROUGELIKE_API ASAICharacter : public ACharacter
@@ -21,6 +23,11 @@ public:
 	ASAICharacter();
 
 protected:
+
+	USWorldUserWidget* ActiveHealthBar;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> HealthBarWidgetClass;
 
 	UPROPERTY(VisibleAnywhere, Category = "Effects")
 	FName TimeToHitParamName;

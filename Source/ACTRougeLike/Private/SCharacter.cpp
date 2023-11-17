@@ -225,6 +225,11 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	PlayerInputComponent->BindAction("Dash", IE_Pressed, this, &ASCharacter::Dash);
 }
 
+void ASCharacter::HealSelf(float Amount)
+{
+	AttributeComp->ApplyHealthChange(this,Amount);
+}
+
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
 	if (Delta < 0.0f)

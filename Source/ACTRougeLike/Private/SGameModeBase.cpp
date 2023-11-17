@@ -22,6 +22,20 @@ void ASGameModeBase::StartPlay()
 	GetWorldTimerManager().SetTimer(TimerHandle_SpawnBots, this, &ASGameModeBase::SpawnBotTimerElapsed, SpawnTimerInterval, true);
 }
 
+void ASGameModeBase::KillAll()
+{
+	int32 NrOfAliveBots = 0;
+	for (TActorIterator<ASAICharacter> It(GetWorld()); It; ++It)
+	{
+		ASAICharacter* Bot = *It;
+		USAttributeComponent* AttributeComp = USAttributeComponent::GetAttributes(Bot);
+		if (ensure(AttributeComp) && AttributeComp->IsAlive())
+		{
+			AttributeComp->Kill(this);
+		}
+	}
+}
+
 void ASGameModeBase::SpawnBotTimerElapsed()
 {
 
@@ -36,8 +50,6 @@ void ASGameModeBase::SpawnBotTimerElapsed()
 		{
 			++NrOfAliveBots;
 		}
-		
-
 	}
 
 	float MaxBotCount = 5.0f;
