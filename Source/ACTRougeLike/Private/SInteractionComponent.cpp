@@ -5,6 +5,8 @@
 #include "SGameplayInterface.h"
 #include "DrawDebugHelpers.h"
 
+static TAutoConsoleVariable<bool> CVarDebugDrawInteraction(TEXT("su.InteractionDebugDraw"), false, TEXT("Enable Debug Lines for Interact Component."), ECVF_Cheat);
+
 // Sets default values for this component's properties
 USInteractionComponent::USInteractionComponent()
 {
@@ -18,6 +20,8 @@ USInteractionComponent::USInteractionComponent()
 
 void USInteractionComponent::PrimaryInteract()
 {
+	bool bDebugDraw = CVarDebugDrawInteraction.GetValueOnGameThread();
+
 	FCollisionObjectQueryParams ObjectQueryParams;
 	ObjectQueryParams.AddObjectTypesToQuery(ECC_WorldDynamic);
 
@@ -42,6 +46,12 @@ void USInteractionComponent::PrimaryInteract()
 
 	for (FHitResult Hit : Hits)
 	{
+		if (bDebugDraw)
+		{
+			GEngine->AddOnScreenDebugMessage(-1,2.0f,FColor::Cyan, FString::Printf(TEXT("bDebugDraw on")));
+			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, lineColor, false, 2.0f);
+		}
+
 		AActor* HitActor = Hit.GetActor();
 		if (HitActor)
 		{
@@ -55,11 +65,13 @@ void USInteractionComponent::PrimaryInteract()
 			}
 		}
 
-		DrawDebugSphere(GetWorld(), Hit.ImpactPoint, Radius, 32, lineColor, false, 2.0f);
 	}
 
-
-	DrawDebugLine(GetWorld(), EyeLocation, End, lineColor, false, 2.0f, 0, 2.0f);
+	if (bDebugDraw) 
+	{
+		DrawDebugLine(GetWorld(), EyeLocation, End, lineColor, false, 2.0f, 0, 2.0f);
+	}
+	
 }
 
 // Called when the game starts
