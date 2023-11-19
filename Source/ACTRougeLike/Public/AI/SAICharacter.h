@@ -6,12 +6,14 @@
 #include "GameFramework/Character.h"
 #include <Perception/PawnSensingComponent.h>
 #include "../SAttributeComponent.h"
+#include <SActionComponent.h>
 #include "SAICharacter.generated.h"
 
 class PawnSensingComponent;
 class USAttributeComponent;
 class UUserWidget;
 class USWorldUserWidget;
+class USActionComponent;
 
 UCLASS()
 class ACTROUGELIKE_API ASAICharacter : public ACharacter
@@ -41,6 +43,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	USAttributeComponent* AttributeComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	USActionComponent* ActionComp;
 
 	UFUNCTION()
 	void OnPawnSeen(APawn* Pawn);

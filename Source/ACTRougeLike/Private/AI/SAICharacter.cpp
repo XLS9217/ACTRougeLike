@@ -8,6 +8,7 @@
 #include "BrainComponent.h"
 #include <SWorldUserWidget.h>
 #include "Components/CapsuleComponent.h"
+#include <SActionComponent.h>
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
@@ -15,6 +16,8 @@ ASAICharacter::ASAICharacter()
 {
     PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>("PawnSensingComp");
     AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+    ActionComp = CreateDefaultSubobject<USActionComponent>("ActionComp");
 
     GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Ignore);
     GetMesh()->SetGenerateOverlapEvents(true);
