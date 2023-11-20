@@ -3,7 +3,21 @@
 
 #include "SItemChest.h"
 #include "Components/StaticMeshComponent.h"
+#include <Net/UnrealNetwork.h>
 
+// Called when the game starts or when spawned
+void ASItemChest::BeginPlay()
+{
+	Super::BeginPlay();
+	
+}
+
+// Called every frame
+void ASItemChest::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
 
 // Sets default values
 ASItemChest::ASItemChest()
@@ -18,25 +32,28 @@ ASItemChest::ASItemChest()
 	LidMesh->SetupAttachment(BaseMesh);
 
 	TargetPitch = 110;
+
+	SetReplicates(true);
 }
+
 
 void ASItemChest::Interact_Implementation(APawn* InstigatorPawn)
 {
+	bLidOpened = !bLidOpened;
+	OnRep_LidOpened();
+}
+
+void ASItemChest::OnRep_LidOpened()
+{
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Interact with chest")));
-	LidMesh->SetRelativeRotation(FRotator(TargetPitch, 0, 0));//relative to what it attatch to
+	float CurrPitch = bLidOpened ? TargetPitch : 0.0f;
+	LidMesh->SetRelativeRotation(FRotator(CurrPitch, 0, 0));//relative to what it attatch to
 }
 
-// Called when the game starts or when spawned
-void ASItemChest::BeginPlay()
+void ASItemChest::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
-	Super::BeginPlay();
-	
-}
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-// Called every frame
-void ASItemChest::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
+	DOREPLIFETIME(ASItemChest, bLidOpened);
 }
 
