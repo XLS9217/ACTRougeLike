@@ -34,6 +34,10 @@ public:
 	// Sets default values for this component's properties
 	USActionComponent();
 
+	/* Returns first occurance of action matching the class provided */
+	UFUNCTION(BlueprintCallable, Category = "Actions")
+	USAction* GetAction(TSubclassOf<USAction> ActionClass) const;
+
 protected:
 
 	UFUNCTION(Server, Reliable)
